@@ -13,6 +13,7 @@ interface StateType {
 const calculatorContractAddress = ContractAddress.Calculator;
 const contractABI = abi.abi;
 const SEPOLIA_NETWORK_ID = "11155111";
+const HARDHAT_NETWORK_ID = "31337";
 
 export default function Home() {
   const [state, setState] = useState<StateType>({
@@ -39,6 +40,7 @@ export default function Home() {
           window.ethereum.on("accountsChanged", () => {
             window.location.reload();
           });
+          // if (ethereum.networkVersion === HARDHAT_NETWORK_ID) {
           if (ethereum.networkVersion === SEPOLIA_NETWORK_ID) {
             const account = await ethereum.request({
               method: "eth_requestAccounts",
@@ -71,7 +73,8 @@ export default function Home() {
     if (!input1 || !input2) return alert("Please enter both numbers");
     if (!userAddress) return alert("You cannot perform operation");
     if (userAddress === "Other Network")
-      return alert("Please Switch to Sepolia Network");
+      // return alert("Please Switch to Sepolia Network");
+      return alert("Please Switch to Hardhat Network");
 
     try {
       if (operation === "add") {
@@ -89,8 +92,11 @@ export default function Home() {
   };
 
   const handleGetResult = async () => {
+    if (!userAddress) return alert("You cannot perform operation");
+    if (userAddress === "Other Network")
+      return alert("Please Switch to Hardhat Network");
+    // return alert("Please Switch to Sepolia Network");
     const response = await state.contract!.getResult();
-    console.log("response:", response.toString());
     setResult(response.toString());
   };
 
